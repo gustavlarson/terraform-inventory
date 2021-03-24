@@ -1,3 +1,3 @@
 FROM alpine:latest
 
-RUN apk add --no-cache ansible python3 openssh
+RUN apk add --no-cache ansible python3 openssh coreutils
