@@ -14,6 +14,7 @@ import (
 
 var version = flag.Bool("version", false, "print version information and exit")
 var list = flag.Bool("list", false, "list mode")
+var terraform = flag.String("terraform-bin", "terraform", "terraform binary")
 var host = flag.String("host", "", "host mode")
 var inventory = flag.Bool("inventory", false, "inventory mode")
 
@@ -69,7 +70,7 @@ func main() {
 	}
 
 	if f.IsDir() {
-		cmd := exec.Command("terraform", "show", "-json")
+		cmd := exec.Command(*terraform, "show", "-json")
 		cmd.Dir = path
 		var out bytes.Buffer
 		cmd.Stdout = &out
@@ -78,7 +79,7 @@ func main() {
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error running `terraform show -json` in directory %s, %s, falling back to trying Terraform pre-0.12 command\n", path, err)
 
-			cmd = exec.Command("terraform", "state", "pull")
+			cmd = exec.Command(*terraform, "state", "pull")
 			cmd.Dir = path
 			out.Reset()
 			cmd.Stdout = &out
